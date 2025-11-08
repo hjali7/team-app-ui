@@ -1,13 +1,14 @@
 {
   "name": "Next.js UI (team-app) - Node 20",
-
   "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
-      "version": "latest"
+      "version": "latest",
+      "moby": false
     }
   },
+
   "customizations": {
     "vscode": {
       "extensions": [
