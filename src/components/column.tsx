@@ -3,7 +3,7 @@
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { useMemo } from 'react';
 import { TaskCard } from './task-card';
-import { Column, Task } from '@/constants/mock-data';
+import type { Column, Task } from '@/constants/mock-data';
 import { CSS } from '@dnd-kit/utilities';
 
 interface ColumnProps {

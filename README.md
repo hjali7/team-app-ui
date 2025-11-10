@@ -72,7 +72,7 @@ src
 ├── hooks               # Custom React hooks
 ├── lib                 # Utility functions and API simulation
 ├── styles              # Global styles
-└── middleware.ts       # Handles internationalization redirects
+└── proxy.ts            # Handles internationalization redirects
 ```
 
 ## License

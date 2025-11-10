@@ -7,8 +7,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Paperclip, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
+interface Message {
+  id: number;
+  user: {
+    name: string;
+    avatar: string;
+  };
+  text: string;
+  fileURL?: string;
+  fileName?: string;
+}
+
 // Mock data for messages
-const initialMessages = [
+const initialMessages: Message[] = [
   { id: 1, user: { name: 'Alice', avatar: 'https://github.com/shadcn.png' }, text: 'Hey everyone, let\'s sync up on the Q3 report.' },
   { id: 2, user: { name: 'Bob', avatar: 'https://github.com/shadcn.png' }, text: 'Sure, I have the preliminary data ready.' },
   { id: 3, user: { name: 'You', avatar: 'https://github.com/shadcn.png' }, text: 'Great! I\'ll set up a meeting for tomorrow.' },
@@ -17,7 +28,7 @@ const initialMessages = [
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
 
 export function TeamChat() {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
