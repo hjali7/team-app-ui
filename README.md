@@ -39,11 +39,11 @@ This is a feature-rich frontend application designed for team and personal task 
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
+    git clone https://github.com/hjali7/team-app-ui
     ```
 2.  Navigate to the project directory:
     ```bash
-    cd your-repo-name
+    cd team-app-ui
     ```
 3.  Install the dependencies:
     ```bash
