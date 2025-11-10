@@ -1,23 +1,26 @@
-name: CI - Build and Push UI Image
+name: CI/CD - Build, Push, and Deploy UI
 
 on:
   push:
     branches:
       - main
 
+# مجوزهای لازم
 permissions:
   contents: read
-  packages: write
+  packages: write # برای پوش کردن به ghcr.io
 
 jobs:
-  build-and-push:
-    name: Build and Push to ghcr.io
+  build-push-deploy:
+    name: Build, Push, and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # ۱. دانلود کردن کد UI
+      - name: Checkout UI code
         uses: actions/checkout@v4
 
+      # ۲. لاگین به رجیستری کانتینر گیت‌هاب
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
@@ -25,11 +28,52 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # ۳. ساخت و پوش ایمیج (با یک ID)
       - name: Build and push Docker image
+        id: build_image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/team-app-ui:latest
-            ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}
+          # ما ایمیج را با تگ SHA کامیت تگ می‌کنیم
+          tags: ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}
+
+      # --- بخش جدید CD ---
+
+      # ۴. نصب ابزار yq (برای ویرایش YAML)
+      - name: Install yq
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+
+      # ۵. دانلود کردن ریپازیتوری platform-config
+      - name: Checkout Platform Config repo
+        uses: actions/checkout@v4
+        with:
+          repository: hjali7/team-app-platform-config # ریپازیتوری پلتفرم شما
+          path: platform-config # دانلود در این زیرپوشه
+          ssh-key: ${{ secrets.PLATFORM_CONFIG_DEPLOY_KEY }} # کلید خصوصی که در گام ۲ ست کردیم
+
+      # ۶. آپدیت کردن فایل YAML و پوش کردن تغییرات
+      - name: Update image tag in platform-config
+        run: |
+          cd platform-config
+          
+          # ساختن آدرس کامل ایمیج جدید با تگ SHA
+          NEW_IMAGE_URL="ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}"
+          
+          # استفاده از yq برای آپدیت کردن فایل
+          yq -i '.spec.template.spec.containers[0].image = strenv(NEW_IMAGE_URL)' base/03-frontend-deployment.yaml
+          
+          # تنظیمات گیت
+          git config --global user.name "GitHub Actions (UI)"
+          git config --global user.email "actions@github.com"
+          
+          # کامیت و پوش کردن تغییرات
+          git add .
+          if git diff-index --quiet HEAD; then
+            echo "No changes to deploy."
+          else
+            git commit -m "feat(ui): update frontend image to ${{ github.sha }}"
+            git push
+          fi
