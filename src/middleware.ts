@@ -9,7 +9,16 @@ export default createMiddleware({
 });
 
 export const config = {
-  // Skip all paths that should not be internationalized. This example skips
-  // certain folders and all pathnames with a dot (e.g. favicon.ico)
-  matcher: ['/((?!api|_next|.*\\..*).*)']
+  matcher: [
+    // Enable a redirect to a matching locale at the root
+    '/',
+
+    // Set a cookie to remember the previous locale for
+    // all requests that have a locale prefix
+    '/(fa|en)/:path*',
+
+    // Enable redirects that add a locale prefix
+    // (e.g. `/pathnames` -> `/en/pathnames`)
+    '/((?!_next|api|.*\\..*).*)'
+  ]
 };
