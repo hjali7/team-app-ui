@@ -46,7 +46,7 @@ jobs:
         with:
           repository: hjali7/team-app-platform-config # ریپازیتوری پلتفرم شما
           path: platform-config # دانلود در این زیرپوشه
-          toke: ${{ secrets.PLATFORM_CONFIG_TOKEN }} # کلید خصوصی که در گام ۲ ست کردیم
+          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }} # کلید خصوصی که در گام ۲ ست کردیم
 
       # ۶. آپدیت کردن فایل YAML و پوش کردن تغییرات
       - name: Update image tag in platform-config
