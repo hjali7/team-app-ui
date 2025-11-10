@@ -26,43 +26,36 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        id: build_image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}
 
-      
-
       - name: Install yq
         run: |
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
-   
       - name: Checkout Platform Config repo
         uses: actions/checkout@v4
         with:
-          repository: hjali7/team-app-platform-config 
-          path: platform-config 
-          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }} 
+          repository: hjali7/team-app-platform-config
+          path: platform-config
+          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }}
 
-    
       - name: Update image tag in platform-config
         run: |
           cd platform-config
           
-          # ساختن آدرس کامل ایمیج جدید با تگ SHA
+          # متغیر را export می‌کنیم
           export NEW_IMAGE_URL="ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}"
           
-          # استفاده از yq برای آپدیت کردن فایل
-          yq -i '(kind == "Deployment") .spec.template.spec.containers[0].image = strenv(NEW_IMAGE_URL)' base/03-frontend-deployment.yaml
-          
+          # (FIX) از دستور yq دقیق‌تری استفاده می‌کنیم که مستقیماً نام دیپلوی را هدف می‌گیرد
+          yq -i 'select(.metadata.name == "frontend-deployment") | .spec.template.spec.containers[0].image = strenv(NEW_IMAGE_URL)' base/03-frontend-deployment.yaml
           
           git config --global user.name "GitHub Actions (UI)"
           git config --global user.email "actions@github.com"
-          
           
           git add .
           if git diff-index --quiet HEAD; then
