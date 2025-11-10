@@ -9,7 +9,7 @@ export default function RootPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold">Dhfdfgdfghashboard</h1>
           <PersonalDashboard />
         </div>
       </main>
