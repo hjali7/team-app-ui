@@ -33,37 +33,37 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}
 
-      # --- بخش جدید CD ---
+      
 
       - name: Install yq
         run: |
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
-      # ۵. دانلود کردن ریپازیتوری platform-config
+   
       - name: Checkout Platform Config repo
         uses: actions/checkout@v4
         with:
-          repository: hjali7/team-app-platform-config # ریپازیتوری پلتفرم شما
-          path: platform-config # دانلود در این زیرپوشه
-          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }} # کلید خصوصی که در گام ۲ ست کردیم
+          repository: hjali7/team-app-platform-config 
+          path: platform-config 
+          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }} 
 
-      # ۶. آپدیت کردن فایل YAML و پوش کردن تغییرات
+    
       - name: Update image tag in platform-config
         run: |
           cd platform-config
           
           # ساختن آدرس کامل ایمیج جدید با تگ SHA
-          NEW_IMAGE_URL="ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}"
+          export NEW_IMAGE_URL="ghcr.io/${{ github.repository_owner }}/team-app-ui:${{ github.sha }}"
           
           # استفاده از yq برای آپدیت کردن فایل
-          yq -i '.spec.template.spec.containers[0].image = strenv(NEW_IMAGE_URL)' base/03-frontend-deployment.yaml
+          yq -i '(kind == "Deployment") .spec.template.spec.containers[0].image = strenv(NEW_IMAGE_URL)' base/03-frontend-deployment.yaml
           
-          # تنظیمات گیت
+          
           git config --global user.name "GitHub Actions (UI)"
           git config --global user.email "actions@github.com"
           
-          # کامیت و پوش کردن تغییرات
+          
           git add .
           if git diff-index --quiet HEAD; then
             echo "No changes to deploy."
