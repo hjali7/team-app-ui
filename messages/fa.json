@@ -1,0 +1,25 @@
+{
+  "LoginPage": {
+    "title": "ورود به حساب کاربری",
+    "emailLabel": "ایمیل",
+    "passwordLabel": "رمز عبور",
+    "loginButton": "ورود",
+    "googleButton": "ادامه با گوگل",
+    "microsoftButton": "ادامه با مایکروسافت",
+    "githubButton": "ادامه با گیت‌هاب",
+    "signupPrompt": "حساب کاربری ندارید؟",
+    "signupLink": "ثبت‌نام"
+  },
+  "SignupPage": {
+    "title": "ایجاد حساب کاربری جدید",
+    "usernameLabel": "نام کاربری",
+    "emailLabel": "ایمیل",
+    "passwordLabel": "رمز عبور",
+    "signupButton": "ایجاد حساب",
+    "loginPrompt": "قبلاً ثبت‌نام کرده‌اید؟",
+    "loginLink": "ورود"
+  },
+  "DashboardPage": {
+    "title": "داشبورد"
+  }
+}

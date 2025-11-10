@@ -1,0 +1,25 @@
+{
+  "LoginPage": {
+    "title": "Login to your account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "googleButton": "Continue with Google",
+    "microsoftButton": "Continue with Microsoft",
+    "githubButton": "Continue with GitHub",
+    "signupPrompt": "Don't have an account?",
+    "signupLink": "Sign Up"
+  },
+  "SignupPage": {
+    "title": "Create a new account",
+    "usernameLabel": "Username",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "signupButton": "Create account",
+    "loginPrompt": "Already have an account?",
+    "loginLink": "Login"
+  },
+  "DashboardPage": {
+    "title": "Dashboard"
+  }
+}
