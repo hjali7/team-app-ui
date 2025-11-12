@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages } from 'next-intl/server'; // Make sure this is 'next-intl/server'
 import { GeistSans } from "geist/font/sans";
 import { Vazirmatn } from 'next/font/google';
 import { ThemeProvider } from "@/components/theme-provider";
@@ -18,19 +18,24 @@ export const metadata: Metadata = {
   description: "A modern, Notion-inspired task management web application.",
 };
 
+// --- 1. FIX HERE: Revert back to using Promise ---
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: Promise<{
+  params: Promise<{ // <-- This was correct
     locale: string;
   }>;
 }
 
 export default async function RootLayout({
   children,
-  params,
+  params, // <-- 2. FIX HERE: Revert back to this
 }: Readonly<RootLayoutProps>) {
-  const { locale } = await params;
-  const messages = await getMessages();
+  
+  // --- 3. FIX HERE: Await the params to get locale ---
+  const { locale } = await params; 
+
+  // --- 4. THE REAL FIX: Pass the locale into getMessages ---
+  const messages = await getMessages({locale});
 
   return (
     <html lang={locale} dir={locale === 'fa' ? 'rtl' : 'ltr'} suppressHydrationWarning>
